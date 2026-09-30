@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-offline/
+
+# Editor / OS noise
+.vite/
+*.local
+.DS_Store

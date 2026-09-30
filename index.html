@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080c14" />
+    <meta
+      name="description"
+      content="IIMT Group of Colleges, Greater Noida - NAAC A+ accredited campus offering B.Tech, MBA, BCA/MCA, Pharmacy and Law programs with 100% placement assistance. Apply online or book a campus visit."
+    />
+    <meta name="author" content="B.Tech Computer Science & Engineering - Capstone Project" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="IIMT Group of Colleges, Greater Noida | Shaping Tomorrow's Leaders" />
+    <meta
+      property="og:description"
+      content="Admissions open 2026. Explore Engineering, Management, Pharmacy, Law and Computer Applications faculties at IIMT Group of Colleges, Knowledge Park-III, Greater Noida."
+    />
+    <meta property="og:image" content="./images/campus-building.jpg" />
+    <title>IIMT Group of Colleges, Greater Noida | Shaping Tomorrow's Leaders</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      // The portal is designed dark-only. Set before paint so no light flash is possible,
+      // and so Tailwind's dark utilities are correct on the very first frame.
+      document.documentElement.setAttribute("data-theme", "dark");
+    </script>
+
+    <noscript>
+      <style>
+        /* AOS keeps [data-aos] elements at opacity 0 until its JS boots. With JS off there is no
+           AOS, so force the revealed state and stop the marquee conveyor belt. */
+        [data-aos] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .marquee__track {
+          animation: none !important;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding: 2rem; color: #e2e8f5; font-family: system-ui">
+        This admission portal needs JavaScript for the interactive campus tour, program filters
+        and enquiry form. Please enable JavaScript, or call the admission desk on 0120-2322655.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

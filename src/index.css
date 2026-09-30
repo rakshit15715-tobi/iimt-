@@ -1,0 +1,352 @@
+@import "tailwindcss";
+
+/* The portal is dark-only: index.html stamps data-theme="dark" before paint, so there is no
+   light-mode flash. The variant is declared anyway so `dark:` utilities stay meaningful. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Raw design tokens (SRS §3.1 palette + §3.2 glass layer) ---------- */
+:root {
+  color-scheme: dark;
+
+  /* Foundation */
+  --iimt-canvas: #080c14;
+  --iimt-canvas-2: #0b1220;
+  --iimt-surface: #0e1626;
+  --iimt-surface-2: #141e33;
+  --iimt-line: #22304c;
+
+  /* Type */
+  --iimt-content: #ffffff;
+  --iimt-body: #cbd5e1;
+  --iimt-muted: #94a3b8;
+
+  /* IIMT crimson carries the brand; cyan is the "technology" accent; amber the campus-life one */
+  --iimt-brand: #e11d2e;
+  --iimt-brand-bright: #ff3b52;
+  --iimt-brand-ink: #ffd0d6;
+  --iimt-brand-soft: rgba(225, 29, 46, 0.14);
+  --iimt-accent: #00f2fe;
+  --iimt-accent-ink: #a5f3fc;
+  --iimt-accent-soft: rgba(0, 242, 254, 0.12);
+  --iimt-gold: #ff9900;
+  --iimt-gold-ink: #fed7aa;
+  --iimt-gold-soft: rgba(255, 153, 0, 0.12);
+  --iimt-success: #34d399;
+
+  --iimt-radius: 1rem;
+  --iimt-shadow-glass: 0 30px 70px -40px rgba(2, 6, 23, 0.95),
+    0 18px 40px -30px rgba(225, 29, 46, 0.3);
+  --iimt-glow-brand: 0 16px 42px -16px rgba(225, 29, 46, 0.7);
+  --iimt-glow-accent: 0 16px 42px -18px rgba(0, 242, 254, 0.45);
+  --iimt-glow-gold: 0 16px 42px -18px rgba(255, 153, 0, 0.45);
+
+  /* Sticky chrome height, reused for scroll-margin so anchored sections never hide under it */
+  --iimt-header-h: 6.5rem;
+}
+
+/* "inline" makes utilities emit var() references, so one token change re-skins the portal. */
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: var(--iimt-canvas);
+  --color-canvas-2: var(--iimt-canvas-2);
+  --color-surface: var(--iimt-surface);
+  --color-surface-2: var(--iimt-surface-2);
+  --color-line: var(--iimt-line);
+  --color-content: var(--iimt-content);
+  --color-body: var(--iimt-body);
+  --color-muted: var(--iimt-muted);
+  --color-brand: var(--iimt-brand);
+  --color-brand-bright: var(--iimt-brand-bright);
+  --color-brand-ink: var(--iimt-brand-ink);
+  --color-brand-soft: var(--iimt-brand-soft);
+  --color-accent: var(--iimt-accent);
+  --color-accent-ink: var(--iimt-accent-ink);
+  --color-accent-soft: var(--iimt-accent-soft);
+  --color-gold: var(--iimt-gold);
+  --color-gold-ink: var(--iimt-gold-ink);
+  --color-gold-soft: var(--iimt-gold-soft);
+  --color-success: var(--iimt-success);
+
+  --shadow-soft: var(--iimt-shadow-glass);
+  --shadow-glow-brand: var(--iimt-glow-brand);
+  --shadow-glow-accent: var(--iimt-glow-accent);
+  --shadow-glow-gold: var(--iimt-glow-gold);
+
+  --radius-card: 1.25rem;
+  --radius-pill: 9999px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Anchor jumps stop below the sticky navbar instead of underneath it. */
+    scroll-padding-top: calc(var(--iimt-header-h) + 0.5rem);
+  }
+
+  body {
+    @apply bg-canvas font-sans text-body antialiased;
+    min-height: 100dvh;
+    /* Layered ambience: a crimson wash top-left, a cyan counter-glow right, then the base slate. */
+    background-image:
+      radial-gradient(58% 42% at 12% -6%, rgba(225, 29, 46, 0.22), transparent 68%),
+      radial-gradient(46% 38% at 92% 4%, rgba(0, 242, 254, 0.12), transparent 70%),
+      radial-gradient(60% 50% at 50% 110%, rgba(255, 153, 0, 0.08), transparent 72%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-bold tracking-tight text-content;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--iimt-brand-soft);
+    color: var(--iimt-content);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--iimt-brand-bright);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--iimt-line);
+    border-radius: 9999px;
+    border: 2px solid var(--iimt-canvas);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--iimt-muted);
+  }
+
+}
+
+@layer components {
+  /* ---------- Layout rhythm ---------- */
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+    /* Clears the sticky navbar so #academics never lands underneath it. */
+    scroll-margin-top: calc(var(--iimt-header-h) + 0.5rem);
+  }
+
+  .section-shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ---------- The glass layer (SRS §3.2) ---------- */
+  /* The recipe the SRS prescribes, in exactly one place:
+     bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-2xl shadow-blue-500/5 */
+  .glass {
+    @apply relative border border-white/10 bg-slate-900/40 shadow-2xl shadow-blue-500/5 backdrop-blur-md;
+  }
+
+  .glass-strong {
+    @apply relative border border-white/15 bg-slate-900/70 backdrop-blur-xl;
+  }
+
+  /* A frosted pane is not flat translucency - the inner top-left highlight sells the depth. */
+  .glass::before,
+  .glass-strong::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 46%);
+  }
+
+  /* ---------- Form controls ---------- */
+  .field-label {
+    @apply mb-1.5 flex items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-wider text-muted;
+  }
+
+  .field-control {
+    @apply w-full rounded-xl border border-white/12 bg-white/5 px-3.5 py-2.5 text-sm text-content
+           transition duration-200 placeholder:text-muted/70 hover:border-white/20
+           focus:border-brand/60 focus:bg-white/8 focus:outline-none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .field-control:focus {
+    box-shadow:
+      0 0 0 3px rgba(225, 29, 46, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .field-control--invalid {
+    @apply border-brand/70;
+    background-color: rgba(225, 29, 46, 0.08);
+  }
+
+  .field-control--invalid:focus {
+    box-shadow: 0 0 0 3px rgba(225, 29, 46, 0.3);
+  }
+
+  .field-error {
+    @apply mt-1.5 flex items-center gap-1.5 text-[0.72rem] font-medium text-brand-bright;
+  }
+
+  /* ---------- 3D tilt surface (VanillaTilt injects .js-tilt-glare inside) ---------- */
+  .tilt-surface {
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+  }
+
+  /* ---------- Marquee (SRS §2 campus gallery) ---------- */
+  .marquee {
+    @apply relative w-full;
+  }
+
+  /* The fade at both ends hides the loop seam. */
+  .marquee__viewport {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 46s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee__track--reverse {
+    animation-direction: reverse;
+  }
+
+  /* Equal gap inside a group and between groups keeps the -50% loop perfectly seamless. */
+  .marquee__group {
+    display: flex;
+    gap: 1.25rem;
+    padding-right: 1.25rem;
+    align-items: stretch;
+  }
+
+  .marquee-pause:hover .marquee__track,
+  .marquee-pause:focus-within .marquee__track {
+    animation-play-state: paused;
+  }
+
+  /* ---------- Decorative ambience ---------- */
+  .decor-grid {
+    background-image:
+      linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    background-size: 54px 54px;
+    mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, #000 35%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, #000 35%, transparent 100%);
+  }
+
+  .decor-glow-brand {
+    background: radial-gradient(55% 55% at 15% 0%, rgba(225, 29, 46, 0.3), transparent 70%);
+  }
+
+  .decor-glow-accent {
+    background: radial-gradient(45% 45% at 88% 12%, rgba(0, 242, 254, 0.16), transparent 72%);
+  }
+
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 30px rgba(225, 29, 46, 0.5);
+  }
+}
+
+/* ---------- Keyframes ---------- */
+/* The marquee slides the track by exactly half its width: the second (aria-hidden) copy of the
+   group lands where the first started, so the loop has no visible seam. */
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+/* typed.js injects the cursor element and its own blink keyframes; only the brand colour and
+   weight are overridden here so the cursor matches the design tokens. */
+.typed-cursor {
+  color: var(--iimt-brand-bright);
+  font-weight: 400;
+}
+
+/* ---------- Progressive-enhancement guard ---------- */
+/* aos.css parks every [data-aos] element at opacity 0. Until AOS has actually booted - or if the
+   JS bundle never runs at all - those elements must stay visible instead of leaving the page
+   blank. `aos-ready` is added by initAos(). */
+html:not(.aos-ready) [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ---------- Backdrop-filter fallback ---------- */
+/* Without backdrop blur the glass panes would be too transparent to read, so go near-opaque. */
+@supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
+  .glass {
+    background-color: rgba(15, 23, 42, 0.92);
+  }
+  .glass-strong {
+    background-color: rgba(15, 23, 42, 0.96);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep the gallery reachable: unroll the reel into a static wrapped grid and drop the
+     duplicate (aria-hidden) copy that only existed to make the loop seamless. */
+  .marquee__track {
+    animation: none !important;
+    flex-wrap: wrap;
+  }
+
+  .marquee__group[aria-hidden="true"] {
+    display: none;
+  }
+
+  .marquee__viewport {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
